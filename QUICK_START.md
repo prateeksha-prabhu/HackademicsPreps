@@ -38,8 +38,12 @@ This will serve the static HTML files on port 8000.
 
 2. From the landing page, you can access:
    - Admin Login: Redirects to the React Admin Panel (`http://localhost:5174/adminPanel`)
-   - Parent Login: Redirects to the Parent Portal
-   - Student Login: Redirects to the Student Login page
+   - Parent Login: Redirects to the React Parent Portal (`http://localhost:5175/parent-portal`)
+   - Student Login: Redirects to the React Student Login (`http://localhost:5175/student-login`)
+
+3. New React Components:
+   - Student Dashboard: `http://localhost:5175/student-dashboard`
+   - Student Predictor: `http://localhost:5175/student-predictor`
 
 ## Test Credentials
 

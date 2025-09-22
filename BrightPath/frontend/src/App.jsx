@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import Navbar from './components/Navbar';
-import { Route, Routes,Navigate } from 'react-router-dom';
+import { Route, Routes, Navigate } from 'react-router-dom';
 import Home from './pages/Home';
 import Mark from './pages/Mark';
 import Attedence from './pages/Attedence';
@@ -14,14 +14,18 @@ import { ParentContext } from './context/ParentContext';
 import StudentMarks from './components/StudentMarks';
 import Semester1 from './results/Semester1';
 
+// Import our new components
+import ParentPortal from './pages/ParentPortal';
+import StudentLogin from './pages/StudentLogin';
+import StudentDashboard from './pages/StudentDashboard';
+import StudentPredictor from './pages/StudentPredictor';
+
 const App = () => {
   const { pToken } = useContext(ParentContext); // Context for authentication
   console.log("pToken:", pToken);
 
   return (
     <>
-    
-    
       {pToken ? (
         // Authenticated Routes
         <div className=" mx-4 sm:mx-[10%]">
@@ -44,6 +48,14 @@ const App = () => {
         // Non-authenticated Routes
         <Routes>
           <Route path="/login" element={<Login />} />
+          
+          {/* New routes for our components */}
+          <Route path="/parent-portal" element={<ParentPortal />} />
+          <Route path="/student-login" element={<StudentLogin />} />
+          <Route path="/student-dashboard" element={<StudentDashboard />} />
+          <Route path="/student-predictor" element={<StudentPredictor />} />
+          
+          {/* Default route */}
           <Route path="*" element={<Navigate to="/login" />} />
         </Routes>
       )}
