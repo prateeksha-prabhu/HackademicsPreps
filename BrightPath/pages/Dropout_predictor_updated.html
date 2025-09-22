@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>My Risk Prediction — Student Portal</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    :root{--bg:#0f1724;--card:#0b1220;--muted:#9aa6b2;--accent:#60a5fa;--success:#10b981;--warn:#f59e0b;--danger:#ef4444}
+    *{box-sizing:border-box;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial}
+    body{margin:0;background:linear-gradient(180deg,#071029 0%, #081522 100%);color:#e6eef6;min-height:100vh;position:relative}
+    .app{max-width:700px;margin:36px auto;padding:20px}
+    header{text-align:center;margin-bottom:20px}
+    header h1{margin:0;font-size:22px}
+    header p{color:var(--muted);font-size:13px;margin:4px 0 0}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:20px;border-radius:12px;margin-bottom:16px;border:1px solid rgba(255,255,255,0.03)}
+    label{display:block;margin-bottom:6px;font-size:14px;color:var(--muted)}
+    input[type=number]{width:100%;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.1);background:#0b1220;color:#fff;margin-bottom:12px}
+    .btn{background:var(--accent);border:none;color:#04203a;padding:10px 16px;border-radius:8px;cursor:pointer;font-weight:600;width:100%}
+    .risk-pill{display:inline-block;padding:8px 12px;border-radius:999px;font-weight:700;font-size:14px;margin-top:10px}
+    .risk-low{background:rgba(16,185,129,0.12);color:var(--success)}
+    .risk-medium{background:rgba(245,158,11,0.12);color:var(--warn)}
+    .risk-high{background:rgba(239,68,68,0.12);color:var(--danger)}
+    .detail{font-size:14px;color:var(--muted);margin-top:10px}
+    
+    /* Chatbot styles */
+    .chat-button {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 60px;
+      height: 60px;
+      background-color: var(--accent);
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+      transition: transform 0.3s;
+      z-index: 1000;
+    }
+    
+    .chat-button:hover {
+      transform: scale(1.1);
+    }
+    
+    .chat-button i {
+      color: #04203a;
+      font-size: 24px;
+    }
+    
+    .chatbot-container {
+      position: fixed;
+      bottom: 100px;
+      right: 30px;
+      width: 350px;
+      height: 450px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      overflow: hidden;
+      display: none;
+      z-index: 1001;
+    }
+    
+    .chatbot-iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* Welcome banner styles */
+    .welcome-banner {
+      background: linear-gradient(90deg, var(--accent), #3b82f6);
+      padding: 15px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      text-align: center;
+      animation: fadeIn 0.5s;
+    }
+
+    .welcome-banner p {
+      margin: 0;
+      font-weight: 600;
+      font-size: 16px;
+      color: #fff;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .logout-btn {
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 4px;
+      font-size: 12px;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: background 0.2s;
+    }
+
+    .logout-btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <!-- Welcome Banner -->
+    <div class="welcome-banner" id="welcome-banner">
+      <!-- Will be populated with JavaScript -->
+    </div>
+
+    <header>
+      <h1>My Dropout Risk Prediction</h1>
+      <p>Based on your attendance & marks</p>
+    </header>
+
+    <div class="card">
+      <label for="attendance">Attendance %</label>
+      <input id="attendance" type="number" min="0" max="100" placeholder="Enter your attendance %">
+
+      <label for="marks">Average Marks %</label>
+      <input id="marks" type="number" min="0" max="100" placeholder="Enter your average marks %">
+
+      <button class="btn" id="predict">Predict My Risk</button>
+    </div>
+
+    <div class="card" id="result" style="display:none">
+      <h3>Prediction Result</h3>
+      <div id="riskDisplay"></div>
+      <div class="detail" id="suggestion"></div>
+    </div>
+  </div>
+
+  <!-- Chatbot Button -->
+  <div class="chat-button" id="chat-button">
+    <i class="fas fa-comments"></i>
+  </div>
+
+  <!-- Chatbot Container -->
+  <div class="chatbot-container" id="chatbot-container">
+    <iframe src="/BrightPath/chatbot/frontend/index.html" class="chatbot-iframe" id="chatbot-iframe"></iframe>
+  </div>
+
+  <script>
+    const btn = document.getElementById('predict');
+    const result = document.getElementById('result');
+    const riskDisplay = document.getElementById('riskDisplay');
+    const suggestion = document.getElementById('suggestion');
+
+    // Get student roll number from session storage
+    const studentRollNo = sessionStorage.getItem('studentRollNo');
+    const welcomeBanner = document.getElementById('welcome-banner');
+
+    // Display welcome message if roll number exists
+    if (studentRollNo) {
+      welcomeBanner.innerHTML = `
+        <p>Welcome, Student ${studentRollNo}!</p>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+      `;
+      
+      // Pre-fill data for demo students
+      if (studentRollNo === 'S101') {
+        document.getElementById('attendance').value = 82;
+        document.getElementById('marks').value = 72;
+      } else if (studentRollNo === 'S102') {
+        document.getElementById('attendance').value = 55;
+        document.getElementById('marks').value = 60;
+      } else if (studentRollNo === 'S103') {
+        document.getElementById('attendance').value = 92;
+        document.getElementById('marks').value = 88;
+      }
+    } else {
+      // If no student is logged in, show a generic message
+      welcomeBanner.innerHTML = `
+        <p>Welcome to the Student Dropout Predictor</p>
+        <button class="logout-btn" onclick="window.location.href='/BrightPath/pages/StudentLogin.html'">Login</button>
+      `;
+    }
+
+    // Logout function
+    function logout() {
+      sessionStorage.removeItem('studentRollNo');
+      window.location.href = '/BrightPath/pages/StudentLogin.html';
+    }
+
+    btn.addEventListener('click', ()=>{
+      const attendance = parseFloat(document.getElementById('attendance').value)||0;
+      const marks = parseFloat(document.getElementById('marks').value)||0;
+
+      // Rule-based scoring
+      const wA = 0.6; // weight for attendance
+      const wM = 0.4; // weight for marks
+      const score = Math.round((wA*(100-attendance)) + (wM*(100-marks)));
+
+      let level, pillClass;
+      if(score >= 60){level='HIGH'; pillClass='risk-high'}
+      else if(score >= 30){level='MEDIUM'; pillClass='risk-medium'}
+      else {level='LOW'; pillClass='risk-low'}
+
+      riskDisplay.innerHTML = `<span class="risk-pill ${pillClass}">${level} RISK (${score})</span>`;
+
+      if(level==='HIGH'){
+        suggestion.innerHTML = "⚠️ You are at high risk. Please meet your mentor immediately, attend remedial classes, and improve attendance.";
+      } else if(level==='MEDIUM'){
+        suggestion.innerHTML = "🟠 You are at medium risk. Stay consistent, attend all classes, and seek mentor support.";
+      } else {
+        suggestion.innerHTML = "✅ You are at low risk. Keep up your good work and continue engaging in studies.";
+      }
+
+      result.style.display = 'block';
+    });
+
+    // Chatbot functionality
+    const chatButton = document.getElementById('chat-button');
+    const chatbotContainer = document.getElementById('chatbot-container');
+
+    // Toggle chatbot visibility
+    chatButton.addEventListener('click', () => {
+      if (chatbotContainer.style.display === 'block') {
+        chatbotContainer.style.display = 'none';
+      } else {
+        chatbotContainer.style.display = 'block';
+      }
+    });
+  </script>
+</body>
+</html>

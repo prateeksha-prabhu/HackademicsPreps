@@ -491,17 +491,17 @@
     // Login redirects
     document.getElementById('admin-login').addEventListener('click', function(e) {
       e.preventDefault();
-      window.location.href = '/BrightPath/admin/';
+      window.location.href = 'http://localhost:5174/adminPanel';
     });
 
     document.getElementById('parent-login').addEventListener('click', function(e) {
       e.preventDefault();
-      window.location.href = '/BrightPath/frontend/#/login';
+      window.location.href = 'BrightPath/pages/Parent_portal.html';
     });
 
     document.getElementById('student-login').addEventListener('click', function(e) {
       e.preventDefault();
-      window.location.href = '/BrightPath/pages/Dropout_predictor.html';
+      window.location.href = 'BrightPath/pages/StudentLogin.html';
     });
   </script>
 </body>

@@ -69,10 +69,53 @@
       height: 100%;
       border: none;
     }
+
+    /* Welcome banner styles */
+    .welcome-banner {
+      background: linear-gradient(90deg, var(--accent), #3b82f6);
+      padding: 15px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      text-align: center;
+      animation: fadeIn 0.5s;
+    }
+
+    .welcome-banner p {
+      margin: 0;
+      font-weight: 600;
+      font-size: 16px;
+      color: #fff;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .logout-btn {
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 4px;
+      font-size: 12px;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: background 0.2s;
+    }
+
+    .logout-btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
   </style>
 </head>
 <body>
   <div class="app">
+    <!-- Welcome Banner -->
+    <div class="welcome-banner" id="welcome-banner">
+      <!-- Will be populated with JavaScript -->
+    </div>
+
     <header>
       <h1>My Dropout Risk Prediction</h1>
       <p>Based on your attendance & marks</p>
@@ -95,11 +138,57 @@
     </div>
   </div>
 
+  <!-- Chatbot Button -->
+  <div class="chat-button" id="chat-button">
+    <i class="fas fa-comments"></i>
+  </div>
+
+  <!-- Chatbot Container -->
+  <div class="chatbot-container" id="chatbot-container">
+    <iframe src="../chatbot/frontend/index.html" class="chatbot-iframe" id="chatbot-iframe"></iframe>
+  </div>
+
   <script>
     const btn = document.getElementById('predict');
     const result = document.getElementById('result');
     const riskDisplay = document.getElementById('riskDisplay');
     const suggestion = document.getElementById('suggestion');
+
+    // Get student roll number from session storage
+    const studentRollNo = sessionStorage.getItem('studentRollNo');
+    const welcomeBanner = document.getElementById('welcome-banner');
+
+    // Display welcome message if roll number exists
+    if (studentRollNo) {
+      welcomeBanner.innerHTML = `
+        <p>Welcome, Student ${studentRollNo}!</p>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+      `;
+      
+      // Pre-fill data for demo students
+      if (studentRollNo === 'S101') {
+        document.getElementById('attendance').value = 82;
+        document.getElementById('marks').value = 72;
+      } else if (studentRollNo === 'S102') {
+        document.getElementById('attendance').value = 55;
+        document.getElementById('marks').value = 60;
+      } else if (studentRollNo === 'S103') {
+        document.getElementById('attendance').value = 92;
+        document.getElementById('marks').value = 88;
+      }
+    } else {
+      // If no student is logged in, show a generic message
+      welcomeBanner.innerHTML = `
+        <p>Welcome to the Student Dropout Predictor</p>
+        <button class="logout-btn" onclick="window.location.href='StudentLogin.html'">Login</button>
+      `;
+    }
+
+    // Logout function
+    function logout() {
+      sessionStorage.removeItem('studentRollNo');
+      window.location.href = 'StudentLogin.html';
+    }
 
     btn.addEventListener('click', ()=>{
       const attendance = parseFloat(document.getElementById('attendance').value)||0;
@@ -127,19 +216,7 @@
 
       result.style.display = 'block';
     });
-  </script>
 
-  <!-- Chatbot Button -->
-  <div class="chat-button" id="chat-button">
-    <i class="fas fa-comments"></i>
-  </div>
-
-  <!-- Chatbot Container -->
-  <div class="chatbot-container" id="chatbot-container">
-    <iframe src="/BrightPath/chatbot/frontend/index.html" class="chatbot-iframe" id="chatbot-iframe"></iframe>
-  </div>
-
-  <script>
     // Chatbot functionality
     const chatButton = document.getElementById('chat-button');
     const chatbotContainer = document.getElementById('chatbot-container');

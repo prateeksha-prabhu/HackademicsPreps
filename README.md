@@ -137,14 +137,30 @@ serve ProjectBright -p 8000
 
 ## Testing the Application
 
+### Setup for Testing
+
+1. First, serve the static files:
+   ```bash
+   cd ProjectBright
+   npx serve -p 8000
+   ```
+
+2. In a separate terminal, start the backend server:
+   ```bash
+   cd ProjectBright/BrightPath/backend
+   npm run dev
+   ```
+
 ### Accessing the Application
+
 1. Open your browser and navigate to:
    - Main Landing Page: `http://localhost:8000/BrightPath/index.html`
+   - If that doesn't work, try: `http://localhost:8000/index.html` (which redirects to the BrightPath landing page)
 
-2. From the landing page, you can access:
+2. From the landing page, you can access the three portals:
    - Admin Login: Redirects to the Admin Panel
    - Parent Login: Redirects to the Parent Portal
-   - Student Login: Redirects to the Dropout Predictor
+   - Student Login: Redirects to the Student Dropout Predictor
 
 ### Test Credentials
 
@@ -157,18 +173,87 @@ serve ProjectBright -p 8000
 - Password: parent123
 
 #### Student Login
-- Direct access (no authentication required for the demo)
+- Roll Number: S101, S102, or S103
+- Password: student123
+
+### Testing the Landing Page
+
+1. Verify that the landing page loads correctly with three login options
+2. Test the chatbot by clicking the chat icon in the bottom-right corner
+3. Try clicking each login button to ensure they redirect to the correct login pages
+
+### Testing the Admin Panel
+
+1. Login with admin credentials
+2. Verify that you're redirected to the admin dashboard
+3. Test navigation between different sections (Students, Attendance, Marks, etc.)
+4. Try the chatbot functionality
+5. Test the logout button
+
+### Testing the Parent Portal
+
+1. Login with parent credentials
+2. Verify that you're redirected to the Parent Portal page
+3. Search for student records using roll numbers: S101, S102, or S103
+4. Verify that student information, attendance, marks, and risk level are displayed correctly
+5. Test the chatbot functionality
+6. Test the logout button
+
+### Testing the Student Portal
+
+1. Login with student credentials
+2. Verify that you're redirected to the Dropout Predictor page
+3. Notice that the attendance and marks fields are pre-filled based on the student's data
+4. Click "Predict My Risk" to see the risk prediction
+5. Modify the values and predict again to see how the risk level changes
+6. Test the chatbot functionality
+7. Test the logout button
 
 ### Testing the Chatbot
-1. The chatbot button appears in the bottom-right corner of every page
-2. Click the button to open the chatbot window
-3. Type your question or select from suggested queries
-4. The chatbot will respond with relevant information
 
-### Testing Dropout Prediction
-1. Login as a parent and enter a student roll number (e.g., S101, S102, S103)
-2. View the student's dropout risk prediction
-3. As a student, enter your attendance and marks to see your risk prediction
+1. Click the chatbot button in the bottom-right corner of any page
+2. Verify that the chatbot window opens with a welcome message
+3. Test the suggestion chips by clicking on them
+4. Type questions related to:
+   - Attendance tracking
+   - Viewing marks
+   - Dropout prediction
+   - Login issues
+   - Contact support
+5. Verify that the chatbot responds appropriately to each question
+6. Test closing the chatbot window
+
+### Testing MongoDB Integration
+
+If MongoDB is running and configured:
+
+1. Login to the Parent Portal
+2. Search for a student roll number that exists in your MongoDB database
+3. Verify that the data is fetched correctly and displayed
+
+If MongoDB is not available, the application will fall back to demo data for roll numbers S101, S102, and S103.
+
+### Troubleshooting Common Issues
+
+1. **404 Not Found errors**:
+   - Make sure you're serving the files from the correct directory
+   - Check that the file paths in your URLs are correct
+   - Verify that all HTML files exist in the specified locations
+
+2. **Login Redirect Issues**:
+   - Check browser console for any JavaScript errors
+   - Verify that the redirect URLs in the login pages are correct
+   - Clear browser cache if necessary
+
+3. **Chatbot Not Loading**:
+   - Verify that the chatbot iframe path is correct
+   - Check browser console for any CORS errors
+   - Make sure all chatbot files (HTML, CSS, JS) are in the correct locations
+
+4. **MongoDB Connection Issues**:
+   - Verify that MongoDB is running
+   - Check the connection string in the backend .env file
+   - Look for connection errors in the backend console
 
 ## Project Structure
 ```
