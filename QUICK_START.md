@@ -54,6 +54,22 @@ This will serve the static HTML files on port 8000.
 - Roll Number: S101, S102, or S103
 - Password: student123
 
+## Chatbot Implementation
+
+The application includes two different chatbot implementations:
+
+### 1. React Chatbot (Admin Panel)
+- Used in the Admin Panel
+- Implemented as a React component (`ChatbotComponent.jsx`)
+- Features a modern UI with suggestion chips
+- Includes typing indicators and animated responses
+
+### 2. Standalone Chatbot (Parent and Student Portals)
+- Used in the Parent Portal and Student Portal pages
+- Implemented as an iframe that loads the chatbot from `/chatbot/frontend/index.html`
+- Uses vanilla JavaScript for functionality
+- Includes suggestion chips and pre-programmed responses
+
 ## Troubleshooting
 
 ### 404 Not Found Errors
@@ -64,6 +80,7 @@ This will serve the static HTML files on port 8000.
 ### Chatbot Not Loading
 - Check that the paths to the chatbot iframe are correct
 - The chatbot should be accessible at `../chatbot/frontend/index.html` from the pages directory
+- For the React chatbot, make sure the ChatbotComponent is properly imported
 
 ### MongoDB Connection Issues
 - Verify MongoDB is running

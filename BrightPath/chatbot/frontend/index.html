@@ -9,9 +9,12 @@
 </head>
 <body>
   <div class="chat-container">
-    <h1><i class="fas fa-robot"></i> BrightPath Assistant</h1>
+    <div class="chat-header">
+      <h1><i class="fas fa-robot"></i> BrightPath Assistant</h1>
+      <button id="close-chat" class="close-btn"><i class="fas fa-times"></i></button>
+    </div>
     <div id="chat-window" class="chat-window">
-      <div class="message ai">Hi there! I'm your BrightPath assistant. How can I help you today?</div>
+      <!-- Messages will be added here dynamically -->
     </div>
     <div class="input-container">
       <input type="text" id="user-input" placeholder="Type your message here...">
@@ -24,6 +27,6 @@
       <div class="suggestion-chip">Contact support</div>
     </div>
   </div>
-  <script src="script.js"></script>
+  <script src="standalone-chatbot.js"></script>
 </body>
 </html>
