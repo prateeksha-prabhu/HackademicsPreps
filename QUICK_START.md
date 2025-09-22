@@ -1,49 +1,73 @@
 # BrightPath Quick Start Guide
 
-This guide provides quick instructions to get the BrightPath application up and running.
+This guide provides quick instructions to get the BrightPath AI-powered academic risk prediction platform up and running.
 
-## Starting the Application
+## Prerequisites
 
-### 1. Start the Backend Server
+- Node.js (v16+)
+- Python 3 (v3.8+)
+- MongoDB (local or cloud)
+
+## Quick Setup
+
+### 1. Install Dependencies
 
 ```bash
+# Backend
 cd BrightPath/backend
-npm run dev
+npm install
+
+# Frontend
+cd ../frontend
+npm install
+
+# Admin Panel
+cd ../admin
+npm install
+
+# Python ML dependencies
+cd ../backend/python_services
+pip install scikit-learn pandas numpy joblib
 ```
 
-This will start the Node.js/Express backend server on port 4000.
+### 2. Start All Services
 
-### 2. Start the Admin Panel (React)
+**Terminal 1 - Backend Server:**
+```bash
+cd BrightPath/backend
+npm start
+```
+Backend runs on `http://localhost:4000`
 
+**Terminal 2 - Frontend:**
+```bash
+cd BrightPath/frontend
+npm run dev
+```
+Frontend runs on `http://localhost:5173`
+
+**Terminal 3 - Admin Panel:**
 ```bash
 cd BrightPath/admin
 npm run dev
 ```
-
-This will start the React admin panel on port 5174.
-
-### 3. Serve the Static Files
-
-```bash
-# From the project root
-serve -p 8000
-```
-
-This will serve the static HTML files on port 8000.
+Admin Panel runs on `http://localhost:5174`
 
 ## Accessing the Application
 
-1. Open your browser and navigate to:
-   - Main Landing Page: `http://localhost:8000/index.html`
+### Main Application URLs
+- **Frontend Home**: `http://localhost:5173`
+- **Parent Portal**: `http://localhost:5173/parent-portal`
+- **Student Dashboard**: `http://localhost:5173/student-dashboard`
+- **Student Predictor**: `http://localhost:5173/student-predictor`
+- **Admin Panel**: `http://localhost:5174`
 
-2. From the landing page, you can access:
-   - Admin Login: Redirects to the React Admin Panel (`http://localhost:5174/adminPanel`)
-   - Parent Login: Redirects to the React Parent Portal (`http://localhost:5175/parent-portal`)
-   - Student Login: Redirects to the React Student Login (`http://localhost:5175/student-login`)
-
-3. New React Components:
-   - Student Dashboard: `http://localhost:5175/student-dashboard`
-   - Student Predictor: `http://localhost:5175/student-predictor`
+### Landing Page (Optional)
+```bash
+# From project root
+npx serve -p 8000
+```
+Then access: `http://localhost:8000/index.html`
 
 ## Test Credentials
 
@@ -55,37 +79,57 @@ This will serve the static HTML files on port 8000.
 - Direct access (no authentication required for the demo)
 
 ### Student Login
-- Roll Number: S101, S102, or S103
+- Roll Number: S101, S102, or S103 (demo data)
 - Password: student123
 
-## Chatbot Implementation
+## AI/ML Features Demo
 
-The application includes two different chatbot implementations:
+### Test Data Available
+- **S101**: Anjali R - 10th Grade (Demo student with social media data)
+- **S102**: Kiran M - 9th Grade (Demo student with academic data)
+- **S103**: Rahul P - 11th Grade (Demo student with combined data)
 
-### 1. React Chatbot (Admin Panel)
-- Used in the Admin Panel
-- Implemented as a React component (`ChatbotComponent.jsx`)
-- Features a modern UI with suggestion chips
-- Includes typing indicators and animated responses
-
-### 2. Standalone Chatbot (Parent and Student Portals)
-- Used in the Parent Portal and Student Portal pages
-- Implemented as an iframe that loads the chatbot from `/chatbot/frontend/index.html`
-- Uses vanilla JavaScript for functionality
-- Includes suggestion chips and pre-programmed responses
+### Prediction Features
+1. **Dropout Risk Prediction**: Based on test completion, notifications ignored, course progress
+2. **Social Media Impact**: Analyzes usage patterns and their effect on academics
+3. **Academic Performance**: Predicts future performance based on GPA, attendance, study hours
+4. **Combined Risk Assessment**: Holistic view using all available data
 
 ## Troubleshooting
 
-### 404 Not Found Errors
-- Make sure all servers are running
-- Check that the paths in the HTML files are correct
-- Try using the browser's developer tools to see any errors
+### Recent Fixes Applied ✅
+- **Parent Portal Routing**: Fixed "site can't be reached" issue on first visit
+- **Python Spawn Errors**: Updated to use `python3` instead of `python`
+- **HTTP Headers Error**: Fixed multiple response issue in social media controller
+- **Scikit-learn Warnings**: Suppressed version compatibility warnings
 
-### Chatbot Not Loading
-- Check that the paths to the chatbot iframe are correct
-- The chatbot should be accessible at `../chatbot/frontend/index.html` from the pages directory
-- For the React chatbot, make sure the ChatbotComponent is properly imported
+### Common Issues
 
-### MongoDB Connection Issues
-- Verify MongoDB is running
-- Check the connection string in the backend .env file
+1. **Python spawn error**:
+   ```bash
+   # Ensure Python 3 is available
+   python3 --version
+   # Install required packages
+   pip install scikit-learn pandas numpy joblib
+   ```
+
+2. **Parent Portal not loading**:
+   - Clear browser cache
+   - Ensure accessing `http://localhost:5173/parent-portal`
+   - Check browser console for errors
+
+3. **Backend crashes**:
+   - Check MongoDB is running
+   - Verify `.env` file exists with correct settings
+   - Use `rs` in nodemon to restart
+
+4. **Frontend routing issues**:
+   - Refresh the page
+   - Check that all servers are running
+   - Verify Vite dev server is on correct port
+
+### Development Tips
+- Use browser dev tools to debug React components
+- Monitor backend terminal for API errors
+- Check Network tab for failed API requests
+- Use `rs` command to restart nodemon server

@@ -1,8 +1,5 @@
-import joblib
-import json
-import sys
-import os
-import numpy as np
+import warnings
+warnings.filterwarnings("ignore", category=UserWarning)
 import joblib
 import json
 import sys
