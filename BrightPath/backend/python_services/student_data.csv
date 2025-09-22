@@ -1,0 +1,11 @@
+student_id,name,age,gender,department,gpa,attendance_percentage,study_hours_per_week,dropout_risk
+S001,John Doe,20,Male,Computer Science,3.8,90,15,0
+S002,Jane Smith,19,Female,Mathematics,2.1,70,8,1
+S003,Michael Brown,21,Male,Physics,1.9,50,5,2
+S004,Sophia Johnson,22,Female,Chemistry,3.5,85,12,0
+S005,David Lee,20,Male,Electrical Engineering,2.8,60,10,1
+S006,Emily Davis,18,Female,Biology,3.9,95,18,0
+S007,Robert Wilson,23,Male,Mechanical Engineering,1.5,40,4,2
+S008,Linda Martinez,21,Female,Civil Engineering,3.0,80,14,0
+S009,James Anderson,22,Male,Computer Science,2.3,65,7,1
+S010,Patricia Thomas,20,Female,Physics,1.7,55,6,2

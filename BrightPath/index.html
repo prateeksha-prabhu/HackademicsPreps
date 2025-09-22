@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BrightPath - Academic Insights Platform</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --secondary: #10b981;
+      --accent: #f59e0b;
+      --danger: #ef4444;
+      --light: #f8fafc;
+      --dark: #0f172a;
+      --gray: #6b7280;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+    
+    body {
+      background: linear-gradient(135deg, #f0f9ff 0%, #e6f7ff 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    
+    header {
+      background-color: white;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      padding: 20px 0;
+    }
+    
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .logo {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--primary);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+    }
+    
+    .logo i {
+      margin-right: 10px;
+    }
+    
+    .hero {
+      padding: 80px 0;
+      text-align: center;
+    }
+    
+    .hero h1 {
+      font-size: 2.5rem;
+      color: var(--dark);
+      margin-bottom: 20px;
+    }
+    
+    .hero p {
+      font-size: 1.1rem;
+      color: var(--gray);
+      max-width: 700px;
+      margin: 0 auto 40px;
+    }
+    
+    .login-options {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 30px;
+      margin-top: 40px;
+    }
+    
+    .login-card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+      padding: 30px;
+      width: 300px;
+      text-align: center;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    
+    .login-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    }
+    
+    .login-card i {
+      font-size: 48px;
+      margin-bottom: 20px;
+    }
+    
+    .login-card.admin i {
+      color: var(--primary);
+    }
+    
+    .login-card.parent i {
+      color: var(--secondary);
+    }
+    
+    .login-card.student i {
+      color: var(--accent);
+    }
+    
+    .login-card h3 {
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+      color: var(--dark);
+    }
+    
+    .login-card p {
+      color: var(--gray);
+      margin-bottom: 25px;
+      font-size: 0.9rem;
+    }
+    
+    .btn {
+      display: inline-block;
+      padding: 12px 24px;
+      background-color: var(--primary);
+      color: white;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: background-color 0.2s;
+    }
+    
+    .btn:hover {
+      background-color: var(--primary-dark);
+    }
+    
+    .btn.admin {
+      background-color: var(--primary);
+    }
+    
+    .btn.parent {
+      background-color: var(--secondary);
+    }
+    
+    .btn.student {
+      background-color: var(--accent);
+    }
+    
+    .btn.admin:hover {
+      background-color: var(--primary-dark);
+    }
+    
+    .btn.parent:hover {
+      background-color: #0da271;
+    }
+    
+    .btn.student:hover {
+      background-color: #e08e0b;
+    }
+    
+    footer {
+      background-color: white;
+      padding: 20px 0;
+      margin-top: auto;
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+    }
+    
+    .footer-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .footer-links a {
+      color: var(--gray);
+      text-decoration: none;
+      margin-left: 20px;
+      font-size: 0.9rem;
+    }
+    
+    .footer-links a:hover {
+      color: var(--primary);
+    }
+    
+    /* Chatbot button */
+    .chat-button {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 60px;
+      height: 60px;
+      background-color: var(--primary);
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+      transition: transform 0.3s, background-color 0.3s;
+      z-index: 1000;
+    }
+    
+    .chat-button:hover {
+      transform: scale(1.1);
+      background-color: var(--primary-dark);
+    }
+    
+    .chat-button i {
+      color: white;
+      font-size: 24px;
+    }
+    
+    /* Chatbot container */
+    .chatbot-container {
+      position: fixed;
+      bottom: 100px;
+      right: 30px;
+      width: 350px;
+      height: 450px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      overflow: hidden;
+      display: none;
+      z-index: 1001;
+      transition: all 0.3s;
+    }
+    
+    .chatbot-header {
+      background-color: var(--primary);
+      color: white;
+      padding: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .chatbot-header h3 {
+      font-size: 16px;
+      font-weight: 600;
+    }
+    
+    .close-chat {
+      cursor: pointer;
+      font-size: 18px;
+    }
+    
+    .chatbot-body {
+      height: calc(100% - 120px);
+      overflow-y: auto;
+      padding: 15px;
+    }
+    
+    .chatbot-footer {
+      padding: 10px;
+      border-top: 1px solid #eee;
+      display: flex;
+    }
+    
+    .chatbot-input {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      outline: none;
+    }
+    
+    .send-btn {
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 0 15px;
+      margin-left: 10px;
+      cursor: pointer;
+    }
+    
+    .message {
+      margin-bottom: 10px;
+      padding: 10px;
+      border-radius: 8px;
+      max-width: 80%;
+    }
+    
+    .user-message {
+      background-color: #e6f7ff;
+      margin-left: auto;
+    }
+    
+    .bot-message {
+      background-color: #f0f0f0;
+    }
+    
+    @media (max-width: 768px) {
+      .login-options {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .login-card {
+        width: 100%;
+        max-width: 300px;
+      }
+      
+      .hero h1 {
+        font-size: 2rem;
+      }
+      
+      .chatbot-container {
+        width: 300px;
+        right: 10px;
+        bottom: 80px;
+      }
+      
+      .chat-button {
+        right: 20px;
+        bottom: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container header-content">
+      <a href="#" class="logo">
+        <i class="fas fa-graduation-cap"></i>
+        BrightPath
+      </a>
+      <div>
+        <a href="#" class="btn">About Us</a>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <h1>Empowering Education Through Real-Time Insights</h1>
+      <p>BrightPath connects parents, students, and educators with powerful tools to monitor academic progress, attendance, and performance metrics in real-time.</p>
+      
+      <div class="login-options">
+        <div class="login-card admin">
+          <i class="fas fa-user-shield"></i>
+          <h3>Admin Portal</h3>
+          <p>Access administrative tools to manage student data, attendance records, and academic performance metrics.</p>
+          <a href="#" class="btn admin" id="admin-login">Admin Login</a>
+        </div>
+        
+        <div class="login-card parent">
+          <i class="fas fa-user-friends"></i>
+          <h3>Parent Portal</h3>
+          <p>Monitor your child's academic progress, attendance, and receive important announcements from the school.</p>
+          <a href="#" class="btn parent" id="parent-login">Parent Login</a>
+        </div>
+        
+        <div class="login-card student">
+          <i class="fas fa-user-graduate"></i>
+          <h3>Student Portal</h3>
+          <p>Track your academic performance, attendance records, and access personalized learning resources.</p>
+          <a href="#" class="btn student" id="student-login">Student Login</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container footer-content">
+      <p>&copy; 2025 BrightPath Academic Insights Platform</p>
+      <div class="footer-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Contact Us</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Chatbot Button -->
+  <div class="chat-button" id="chat-button">
+    <i class="fas fa-comments"></i>
+  </div>
+
+  <!-- Chatbot Container -->
+  <div class="chatbot-container" id="chatbot-container">
+    <div class="chatbot-header">
+      <h3>BrightPath Assistant</h3>
+      <span class="close-chat" id="close-chat">&times;</span>
+    </div>
+    <div class="chatbot-body" id="chatbot-body">
+      <div class="message bot-message">
+        Hello! How can I help you today with BrightPath?
+      </div>
+    </div>
+    <div class="chatbot-footer">
+      <input type="text" class="chatbot-input" id="chatbot-input" placeholder="Type your message...">
+      <button class="send-btn" id="send-message">
+        <i class="fas fa-paper-plane"></i>
+      </button>
+    </div>
+  </div>
+
+  <script>
+    // Chatbot functionality
+    const chatButton = document.getElementById('chat-button');
+    const chatbotContainer = document.getElementById('chatbot-container');
+    const closeChat = document.getElementById('close-chat');
+    const chatbotInput = document.getElementById('chatbot-input');
+    const sendMessage = document.getElementById('send-message');
+    const chatbotBody = document.getElementById('chatbot-body');
+
+    // Toggle chatbot visibility
+    chatButton.addEventListener('click', () => {
+      chatbotContainer.style.display = 'block';
+    });
+
+    closeChat.addEventListener('click', () => {
+      chatbotContainer.style.display = 'none';
+    });
+
+    // Send message function
+    function sendUserMessage() {
+      const message = chatbotInput.value.trim();
+      if (!message) return;
+
+      // Add user message to chat
+      const userMessageElement = document.createElement('div');
+      userMessageElement.classList.add('message', 'user-message');
+      userMessageElement.textContent = message;
+      chatbotBody.appendChild(userMessageElement);
+
+      // Clear input
+      chatbotInput.value = '';
+
+      // Scroll to bottom
+      chatbotBody.scrollTop = chatbotBody.scrollHeight;
+
+      // Simulate bot response (replace with actual API call in production)
+      setTimeout(() => {
+        const botResponse = getBotResponse(message);
+        const botMessageElement = document.createElement('div');
+        botMessageElement.classList.add('message', 'bot-message');
+        botMessageElement.textContent = botResponse;
+        chatbotBody.appendChild(botMessageElement);
+        
+        // Scroll to bottom again
+        chatbotBody.scrollTop = chatbotBody.scrollHeight;
+      }, 1000);
+    }
+
+    // Send message on button click
+    sendMessage.addEventListener('click', sendUserMessage);
+
+    // Send message on Enter key
+    chatbotInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        sendUserMessage();
+      }
+    });
+
+    // Simple bot responses (replace with actual API in production)
+    function getBotResponse(message) {
+      message = message.toLowerCase();
+      
+      if (message.includes('hello') || message.includes('hi')) {
+        return 'Hello! How can I help you with BrightPath today?';
+      } else if (message.includes('login') || message.includes('password')) {
+        return 'For login issues, please use the respective login portals. If you forgot your password, there\'s a "Forgot Password" option available.';
+      } else if (message.includes('attendance')) {
+        return 'Attendance records are available in the respective portals. Parents and students can view detailed attendance reports.';
+      } else if (message.includes('marks') || message.includes('grades')) {
+        return 'Academic performance metrics including marks and grades can be accessed through your portal after logging in.';
+      } else if (message.includes('contact') || message.includes('help')) {
+        return 'For additional help, please contact our support team at support@brightpath.edu or call us at (555) 123-4567.';
+      } else {
+        return 'I\'m not sure I understand. Could you please rephrase your question or select one of the login options to access more specific information?';
+      }
+    }
+
+    // Login redirects
+    document.getElementById('admin-login').addEventListener('click', function(e) {
+      e.preventDefault();
+      window.location.href = '/BrightPath/admin/';
+    });
+
+    document.getElementById('parent-login').addEventListener('click', function(e) {
+      e.preventDefault();
+      window.location.href = '/BrightPath/frontend/#/login';
+    });
+
+    document.getElementById('student-login').addEventListener('click', function(e) {
+      e.preventDefault();
+      window.location.href = '/BrightPath/pages/Dropout_predictor.html';
+    });
+  </script>
+</body>
+</html>

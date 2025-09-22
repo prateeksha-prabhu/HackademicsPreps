@@ -1,0 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+@import '@fortawesome/fontawesome-free/css/all.min.css';
+
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Global font setting */
+* {
+    font-family: 'Outfit', sans-serif;
+}
+
+/* Active state for hr */
+.active hr {
+    @apply block;
+}
+
+/* Hiding scrollbar (webkit-based browsers) */
+::-webkit-scrollbar {
+    @apply hidden;
+}

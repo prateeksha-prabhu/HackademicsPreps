@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Parent Portal — Student Risk Overview</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    :root{--bg:#f8fafc;--card:#ffffff;--muted:#6b7280;--accent:#2563eb;--success:#10b981;--warn:#f59e0b;--danger:#ef4444}
+    *{box-sizing:border-box;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial}
+    body{margin:0;background:#f1f5f9;color:#111827;min-height:100vh;position:relative}
+    .app{max-width:720px;margin:30px auto;padding:16px}
+    header{text-align:center;margin-bottom:20px}
+    header h1{margin:0;font-size:22px;color:#111827}
+    header p{color:var(--muted);font-size:14px;margin:4px 0 0}
+    .card{background:var(--card);padding:20px;border-radius:12px;margin-bottom:16px;box-shadow:0 2px 6px rgba(0,0,0,0.05)}
+    .section-title{margin:0 0 12px;font-size:16px;color:#111827}
+    .info-item{margin-bottom:8px;font-size:14px}
+    .info-label{font-weight:600;color:#374151}
+    .risk-pill{display:inline-block;padding:8px 12px;border-radius:999px;font-weight:700;font-size:14px;margin-top:10px}
+    .risk-low{background:rgba(16,185,129,0.12);color:var(--success)}
+    .risk-medium{background:rgba(245,158,11,0.12);color:var(--warn)}
+    .risk-high{background:rgba(239,68,68,0.12);color:var(--danger)}
+    .detail{font-size:14px;color:var(--muted);margin-top:10px}
+    .btn{background:var(--accent);color:#fff;border:none;padding:10px 16px;border-radius:8px;cursor:pointer;font-weight:600;width:100%;margin-top:12px}
+    #studentDetails{display:none}
+    input{padding:8px;width:100%;border:1px solid #d1d5db;border-radius:8px;margin-top:8px}
+    
+    /* Chatbot styles */
+    .chat-button {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 60px;
+      height: 60px;
+      background-color: var(--accent);
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+      transition: transform 0.3s;
+      z-index: 1000;
+    }
+    
+    .chat-button:hover {
+      transform: scale(1.1);
+    }
+    
+    .chat-button i {
+      color: white;
+      font-size: 24px;
+    }
+    
+    .chatbot-container {
+      position: fixed;
+      bottom: 100px;
+      right: 30px;
+      width: 350px;
+      height: 450px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      overflow: hidden;
+      display: none;
+      z-index: 1001;
+    }
+    
+    .chatbot-iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <h1>Parent Portal</h1>
+      <p>Enter your child's roll number to view their academic risk prediction</p>
+    </header>
+
+    <div class="card">
+      <h3 class="section-title">Search Student</h3>
+      <input type="text" id="rollInput" placeholder="Enter Roll Number (e.g., S101)" />
+      <button class="btn" id="searchBtn">Search</button>
+    </div>
+
+    <div id="studentDetails">
+      <div class="card">
+        <h3 class="section-title">Student Information</h3>
+        <div class="info-item"><span class="info-label">Name:</span> <span id="studentName"></span></div>
+        <div class="info-item"><span class="info-label">ID:</span> <span id="studentId"></span></div>
+        <div class="info-item"><span class="info-label">Class:</span> <span id="studentClass"></span></div>
+      </div>
+
+      <div class="card">
+        <h3 class="section-title">Performance Details</h3>
+        <div class="info-item"><span class="info-label">Attendance:</span> <span id="attendance"></span></div>
+        <div class="info-item"><span class="info-label">Average Marks:</span> <span id="marks"></span></div>
+        <div class="info-item"><span class="info-label">Risk Level:</span> <span id="riskDisplay" class="risk-pill">Pending</span></div>
+        <div id="suggestion" class="detail"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const students = {
+      "S101": {name:"Anjali R", id:"S101", class:"10th Grade", attendance:82, marks:72},
+      "S102": {name:"Kiran M", id:"S102", class:"9th Grade", attendance:55, marks:60},
+      "S103": {name:"Rahul P", id:"S103", class:"11th Grade", attendance:92, marks:88}
+    };
+
+    function calculateRisk(attendance, marks){
+      const wA=0.6, wM=0.4;
+      const score=Math.round((wA*(100-attendance)) + (wM*(100-marks)));
+      if(score>=60) return {level:'HIGH', class:'risk-high'};
+      else if(score>=30) return {level:'MEDIUM', class:'risk-medium'};
+      else return {level:'LOW', class:'risk-low'};
+    }
+
+    document.getElementById('searchBtn').addEventListener('click',()=>{
+      const roll=document.getElementById('rollInput').value.trim();
+      const student=students[roll];
+      if(!student){alert("Student not found!");return;}
+      document.getElementById('studentDetails').style.display='block';
+      document.getElementById('studentName').textContent=student.name;
+      document.getElementById('studentId').textContent=student.id;
+      document.getElementById('studentClass').textContent=student.class;
+      document.getElementById('attendance').textContent=student.attendance+"%";
+      document.getElementById('marks').textContent=student.marks+"%";
+
+      const risk=calculateRisk(student.attendance, student.marks);
+      const riskDisplay=document.getElementById('riskDisplay');
+      riskDisplay.textContent=risk.level+" RISK";
+      riskDisplay.className='risk-pill '+risk.class;
+
+      const suggestion=document.getElementById('suggestion');
+      if(risk.level==='HIGH') suggestion.textContent="⚠️ High risk. Please meet the mentor immediately and ensure attendance improves.";
+      else if(risk.level==='MEDIUM') suggestion.textContent="🟠 Medium risk. Encourage consistent study and attendance.";
+      else suggestion.textContent="✅ Low risk. Keep up the good work.";
+    });
+  </script>
+
+  <!-- Chatbot Button -->
+  <div class="chat-button" id="chat-button">
+    <i class="fas fa-comments"></i>
+  </div>
+
+  <!-- Chatbot Container -->
+  <div class="chatbot-container" id="chatbot-container">
+    <iframe src="/BrightPath/chatbot/frontend/index.html" class="chatbot-iframe" id="chatbot-iframe"></iframe>
+  </div>
+
+  <script>
+    // Chatbot functionality
+    const chatButton = document.getElementById('chat-button');
+    const chatbotContainer = document.getElementById('chatbot-container');
+
+    // Toggle chatbot visibility
+    chatButton.addEventListener('click', () => {
+      if (chatbotContainer.style.display === 'block') {
+        chatbotContainer.style.display = 'none';
+      } else {
+        chatbotContainer.style.display = 'block';
+      }
+    });
+  </script>
+</body>
+</html>

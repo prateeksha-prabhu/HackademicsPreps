@@ -1,0 +1,9 @@
+Welcome to the sample knowledge base for the Custom AI Chatbox.
+
+This small document contains sample facts you can query after indexing:
+
+- The project demonstrates a simple Retrieval-Augmented Generation (RAG) flow.
+- Indexing breaks files into chunks, computes embeddings, and stores them in vectors.json.
+- The /chat endpoint computes the query embedding, finds similar chunks, and asks the LLM to answer using those chunks as context.
+
+Feel free to replace this file with your own documents (plain .txt). Run `node server.js --index` again to re-index.
